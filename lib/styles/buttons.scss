@@ -3,16 +3,18 @@
   cursor: pointer;
 }
 
-.add-food {
+a.button.new-food {
   background-color: #56CCF2;
-  width: 100px;
+  text-decoration: none;
+  width: 50em;
   border-style: solid;
   color: black;
   border-color: black;
   border-width: 1.5px;
-  font-size: 1em;
+  font-size: 1.5em;
   cursor: pointer;
   border-radius: 25px;
   margin-bottom: 1em;
   margin-top: 1em;
 }
+
