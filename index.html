@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Quantified Self - Diary</title>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
@@ -13,38 +13,38 @@
     <!-- </form> -->
     <a type='submit' href="./foods.html" class="button new-food"><b>Create Food</b></a>
 
-  <h1>Main Diary</h1>
+    <h1>Main Diary</h1>
 
-    <div class='meal-wrapper column'>
+    <div class='meal-wrapper'>
     </div>
 
-<h2>Foods</h2>
+    <h2>Foods</h2>
     <button onclick="location.href='./foods.html'" type="button" class="add-food button">Create New</button>
-<h4>Add Selected To</h4>
+    <h4>Add Selected To</h4>
     <div class="row btn-group" role="group">
-        <div class="column">
-            <button type="button" class="add-food button" id="1">Breakfast</button>
-            <button type="button" class="add-food button" id="4">Dinner</button>
-        </div>
-        <div class="column">
-            <button type="button" class="add-food button" id="3">Lunch</button>
-            <button type="button" class="add-food button" id="2">Snack</button>
-        </div>
+      <div class="column">
+        <button type="button" class="add-food button" id="1">Breakfast</button>
+        <button type="button" class="add-food button" id="4">Dinner</button>
+      </div>
+      <div class="column">
+        <button type="button" class="add-food button" id="3">Lunch</button>
+        <button type="button" class="add-food button" id="2">Snack</button>
+      </div>
     </div>
 
     <h4>Search by Name</h4>
     <input type="text" id="myInput" placeholder="Search Food">
 
     <table class="meal-foods-table">
-        <thead>
+      <thead>
         <tr>
-           <th class="hidden"></th>
-            <th>Name</th>
-            <th>Calories</th>
+          <th class="hidden"></th>
+          <th>Name</th>
+          <th>Calories</th>
         </tr>
-        </thead>
-        <tbody class="meal-foods-body">
-        </tbody>
+      </thead>
+      <tbody class="meal-foods-body">
+      </tbody>
     </table>
 
     <script src="main.bundle.js"></script>
