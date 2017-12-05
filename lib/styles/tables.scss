@@ -22,6 +22,18 @@ a.delete, a.meal-food-delete {
   font-size: 1.5em;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.total, .remaining-cal, .meal-calories {
+  background-color: #f2f2f2;
+}
+
 // .meals {
 //   display: grid;
 //   grid-template-columns: 300px 300px 300px;
