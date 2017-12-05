@@ -1,16 +1,13 @@
 table, td, th {
   border-collapse: collapse;
   border: 0.05em solid black;
-  text-align: center;
   vertical-align: center;
   height: 2em;
 }
 td, th, td.meal-calories, .food-calories {
   padding-left: 2.1em;
-  text-align: center;
   border-collapse: collapse;
   border: 0.05em solid black;
-  text-align: center;
   vertical-align: center;
   height: 2em;
   padding: .25em;
@@ -34,10 +31,14 @@ a.delete, a.meal-food-delete {
   background-color: #f2f2f2;
 }
 
-// .meals {
-//   display: grid;
-//   grid-template-columns: 300px 300px 300px;
-//   grid-gap: 10px;
-//   background-color: #fff;
-//   color: #444;
-// }
+.box {
+  display: grid;
+  grid-template-columns: 300px 300px 300px;
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+}
+
+.foods input {
+  width: 300px;
+}

@@ -1,0 +1,11 @@
+$font-stack: Arial, Helvetica, san-serif;
+
+h1.meal {
+  font-size: 100%;
+  font-weight: bold;
+  text-align: left;
+}
+
+table {
+  font: 100% $font-stack;
+}
