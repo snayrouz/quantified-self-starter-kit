@@ -10606,7 +10606,11 @@
 
 
 	// module
+<<<<<<< HEAD
 	exports.push([module.id, "table, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n", ""]);
+=======
+	exports.push([module.id, "table, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 300px 300px 300px;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods input {\n  width: 300px; }\n", ""]);
+>>>>>>> 60adcdd531c3651ca50d3a580dcf024bf9968e48
 
 	// exports
 
@@ -10954,7 +10958,11 @@
 
 
 	// module
+<<<<<<< HEAD
 	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n\nh2 {\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n", ""]);
+=======
+	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n", ""]);
+>>>>>>> 60adcdd531c3651ca50d3a580dcf024bf9968e48
 
 	// exports
 
@@ -10994,7 +11002,11 @@
 
 
 	// module
+<<<<<<< HEAD
 	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
+=======
+	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 100px;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
+>>>>>>> 60adcdd531c3651ca50d3a580dcf024bf9968e48
 
 	// exports
 
