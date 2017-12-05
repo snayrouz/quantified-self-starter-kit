@@ -3,15 +3,45 @@
   <head>
     <meta charset="utf-8">
     <title>Quantified Self - Diary</title>
+    <link rel="stylesheet" href="vendors/font-awesome-4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
   </head>
-  <body>
-<h2>Foods</h2>
-<a href="./foods.html" class="button"><b>Create Food</b></a></br>
-<input type="text" id="myInput" placeholder="Filter by Food">
+  <body class="container">
+
 
     <div class='meals'>
     </div>
+
+    <h2>Foods</h2>
+    <a href="./foods.html" class="btn btn-outline-info button"><b>Create New Food</b></a></br>
+
+
+<h4>Add Selected To</h4>
+<div class="row btn-group" role="group" aria-label="Meal Selection">
+  <div class="column">
+    <button type="button" class="btn btn-outline-info button" id="1">Breakfast</button>
+    <button type="button" class="btn btn-outline-info button" id="4">Dinner</button>
+  </div>
+  <div class="column">
+    <button type="button" class="btn btn-outline-info button" id="3">Lunch</button>
+    <button type="button" class="btn btn-outline-info button" id="2">Snack</button>
+  </div>
+</div>
+    <p><b>Search by Name</b></p>
+    <input type="text" id="myInput" placeholder="Search Food">
+    <table class='foods-table'>
+      <tr>
+        <th>Name</th>
+        <th>Calories</th>
+      </tr>
+      <tbody class='foods-body'>
+
+      </tbody>
+    </table>
+
 
     <script src="main.bundle.js"></script>
     <script src="https://use.fontawesome.com/01655b8e0e.js"></script>
