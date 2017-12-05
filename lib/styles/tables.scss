@@ -5,6 +5,10 @@ table, td, th {
   height: 2em;
 }
 
+th  {
+  background-color: #dddddd;
+}
+
 td, th, td.meal-calories, .food-calories {
   padding-left: 2.1em;
   border-collapse: collapse;
