@@ -3,14 +3,41 @@
   <head>
     <meta charset="utf-8">
     <title>Quantified Self - Diary</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-<h2>Foods</h2>
-<a href="./foods.html" class="button"><b>Create Food</b></a>
+
 
     <div class='meal-wrapper'>
     </div>
+<h2>Foods</h2>
+    <a href="./foods.html" class="add-food" type="submit"><b>Create New</b></a>
+<h4>Add Selected To</h4>
+    <div class="row btn-group meal-selection" role="group" aria-label="Meal Selection">
+        <div class="column">
+            <button type="button" class="add-food button" id="1">Breakfast</button>
+            <button type="button" class="add-food button" id="4">Dinner</button>
+        </div>
+        <div class="column">
+            <button type="button" class="add-food button" id="3">Lunch</button>
+            <button type="button" class="add-food button" id="2">Snack</button>
+        </div>
+    </div>
+
+    <h4>Search by Name</h4>
+    <input type="text" id="myInput" placeholder="Search Food">
+    <table class="foods-table">
+        <thead>
+        <tr>
+            <th>
+            <th>Name</th>
+            <th>Calories</th>
+        </tr>
+        </thead>
+        <tbody class="foods-body">
+        </tbody>
+    </table>
 
     <script src="main.bundle.js"></script>
     <script src="https://use.fontawesome.com/01655b8e0e.js"></script>
