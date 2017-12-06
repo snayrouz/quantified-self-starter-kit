@@ -10453,7 +10453,7 @@
 	};
 
 	var appendMeal = function appendMeal(meal) {
-	  $('div.meal-wrapper').append('<div class=\'box\'><table id=' + meal.id + ' class=\'meal-foods\'>\n                             <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n                             <tr><th>Ingredients</th><th>Calories</th></tr>\n                             </table></div>').append(mealFoods(meal));
+	  $('div.meal-wrapper').append('<div class=\'box\'><table id=' + meal.id + ' class=\'meal-foods\'>\n  <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n  <tr><th>Ingredients</th><th>Calories</th></tr>\n  </table></div>').append(mealFoods(meal));
 	  appendCalTotals(meal);
 	  appendRemCal(meal);
 	};
@@ -10461,7 +10461,7 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n                                  <td class=\'food-name\'>' + food.name + '</td>\n                                  <td class=\'food-calories\'>' + food.calories + '</td>\n                                  <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n                                  </tr>');
+	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
 	};
 
