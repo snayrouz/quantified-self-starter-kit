@@ -10455,7 +10455,7 @@
 	    $.each(data, function (key, value) {
 	      appendMeal(value);
 	    });
-	  });
+	  }).then(allTotalCal).then(allRemCal);
 	};
 
 	var appendMeal = function appendMeal(meal) {
@@ -10467,7 +10467,7 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n                                  <td class=\'food-name\'>' + food.name + '</td>\n                                  <td class=\'food-calories\'>' + food.calories + '</td>\n                                  <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n                                  </tr>');
+	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
 	};
 
@@ -10494,19 +10494,12 @@
 	  console.log(total);
 	  $.each(total, function (i, mealCal) {
 	    sum += parseInt(mealCal.innerHTML);
-=======
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
->>>>>>> master
 	  });
 	  $('table.totals-table').append('<tr><td>Total Calories: </td><td>' + sum + '</td></tr>');
 	};
 
 	var addFoodToMeal = function addFoodToMeal() {
 	  $('.btn-group').on('click', 'button[id^=meal-button]', function (e) {});
-	};
-
-	var prependMealFood = function prependMealFood(food) {
-	  $('<tr id=' + food.id + '>\n      <td><input type=\'checkbox\'/></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
 	};
 
 	var prependMealFood = function prependMealFood(food) {
@@ -10571,13 +10564,7 @@
 	  $('table#' + meal.id + ' tr:last').after(remCal(meal));
 	};
 
-<<<<<<< HEAD
 	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood, addFoodToMeal: addFoodToMeal };
-=======
-	getMeals();
-	mealFoodDeleteListener();
-	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood };
->>>>>>> master
 
 /***/ }),
 /* 5 */
