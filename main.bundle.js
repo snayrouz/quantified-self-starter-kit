@@ -48,7 +48,7 @@
 
 	var $ = __webpack_require__(1);
 	__webpack_require__(2);
-	__webpack_require__(5);
+	__webpack_require__(4);
 	__webpack_require__(6);
 	__webpack_require__(10);
 	__webpack_require__(12);
@@ -10319,11 +10319,11 @@
 	'use strict';
 
 	var handlers = __webpack_require__(3);
-	var requests = __webpack_require__(4);
+	var requests = __webpack_require__(5);
 	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
 
 	$(document).ready(function () {
-	  loadFoods();
+	  requests.retrieveFoods();
 	  $('#myInput').keyup(filterFoods);
 
 	  $('.foods-table').on('focusout', '[contenteditable]', function () {
@@ -10343,10 +10343,6 @@
 	    data: updatedFood,
 	    success: console.log(attr + ' updated to ' + value)
 	  });
-	};
-
-	var loadFoods = function loadFoods() {
-	  requests.retrieveFoods();
 	};
 
 	var filterFoods = function filterFoods() {
@@ -10412,6 +10408,7 @@
 
 	'use strict';
 
+	var mealFoods = __webpack_require__(4);
 	var $ = __webpack_require__(1);
 
 	var postSuccess = function postSuccess(data) {
@@ -10433,55 +10430,14 @@
 	};
 
 	var prependFood = function prependFood(food) {
-	  $('<tr id=' + food.id + '>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      <td><a class=\'delete\' ><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n      </tr>').prependTo('tbody.foods-body');
+	  $('<tr id=' + food.id + '>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      <td class=\'delete\'><a class=\'delete\' ><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n      </tr>').prependTo('tbody.foods-body');
+	  mealFoods.prependMealFood(food);
 	};
 
 	module.exports = { postSuccess: postSuccess, postError: postError, prependFood: prependFood };
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var $ = __webpack_require__(1);
-	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
-	var handlers = __webpack_require__(3);
-	var foods = __webpack_require__(2);
-
-	var createFood = function createFood(food, calories) {
-	  $.ajax({
-	    type: "POST",
-	    url: api + '/foods',
-	    data: { food: {
-	        name: $.trim(food),
-	        calories: $.trim(calories)
-	      } },
-	    success: function success(data) {
-	      handlers.postSuccess(data);
-	    },
-	    error: function error(_error) {
-	      handlers.postError(_error);
-	    }
-	  });
-	};
-
-	var retrieveFoods = function retrieveFoods() {
-	  $.get(api + '/foods').then(function (foods) {
-	    foods = foods.sort(function (a, b) {
-	      return a.id - b.id;
-	    });
-	    foods.forEach(function (food) {
-	      handlers.prependFood(food);
-	    });
-	  });
-	  foods.deleteFoodId;
-	};
-
-	module.exports = { createFood: createFood, retrieveFoods: retrieveFoods };
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -10489,17 +10445,15 @@
 	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
 
 	var getMeals = function getMeals() {
-	  $('.meal-wrapper').empty();
 	  $.get(api + '/meals', function (data) {
 	    $.each(data, function (key, value) {
 	      appendMeal(value);
 	    });
 	  });
-	  mealFoodDeleteListener();
 	};
 
 	var appendMeal = function appendMeal(meal) {
-	  $('.meal-wrapper').append('<div class=\'box\'><table id=' + meal.id + ' class=\'meal-foods-table\'>\n                             <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n                             <tr><th>Ingredients</th><th>Calories</th><th></th></tr>\n                             </table></div>').append(mealFoods(meal));
+	  $('div.meal-wrapper').append('<div class=\'box\'><table id=' + meal.id + ' class=\'meal-foods\'>\n                             <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n                             <tr><th>Ingredients</th><th>Calories</th></tr>\n                             </table></div>').append(mealFoods(meal));
 	  appendCalTotals(meal);
 	  appendRemCal(meal);
 	};
@@ -10507,8 +10461,12 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n                                  <td class=\'food-name\'>' + food.name + '</td>\n                                  <td class=\'food-calories\'>' + food.calories + '</td>\n                                  <td><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n                                  </tr>');
+	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n                                  <td class=\'food-name\'>' + food.name + '</td>\n                                  <td class=\'food-calories\'>' + food.calories + '</td>\n                                  <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n                                  </tr>');
 	  });
+	};
+
+	var prependMealFood = function prependMealFood(food) {
+	  $('<tr id=' + food.id + '>\n      <td></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
 	};
 
 	var mealFoodDeleteListener = function mealFoodDeleteListener() {
@@ -10526,7 +10484,7 @@
 	    url: api + '/meals/' + mealId + '/foods/' + id,
 	    success: 'Meal Food ' + id + ' deleted'
 	  }).then(function () {
-	    $('tr.' + id).remove();
+	    $('.meal-wrapper').empty();
 	    getMeals();
 	  });
 	};
@@ -10569,7 +10527,51 @@
 	  $('table#' + meal.id + ' tr:last').after(remCal(meal));
 	};
 
-	module.exports = getMeals();
+	getMeals();
+	mealFoodDeleteListener();
+	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood };
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var $ = __webpack_require__(1);
+	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
+	var handlers = __webpack_require__(3);
+	var foods = __webpack_require__(2);
+
+	var createFood = function createFood(food, calories) {
+	  $.ajax({
+	    type: "POST",
+	    url: api + '/foods',
+	    data: { food: {
+	        name: $.trim(food),
+	        calories: $.trim(calories)
+	      } },
+	    success: function success(data) {
+	      handlers.postSuccess(data);
+	    },
+	    error: function error(_error) {
+	      handlers.postError(_error);
+	    }
+	  });
+	};
+
+	var retrieveFoods = function retrieveFoods() {
+	  $.get(api + '/foods').then(function (foods) {
+	    // foods = foods.sort((a, b) => {
+	    //   return a.id - b.id
+	    // })
+	    foods.forEach(function (food) {
+	      handlers.prependFood(food);
+	    });
+	  });
+	  foods.deleteFoodId;
+	};
+
+	module.exports = { createFood: createFood, retrieveFoods: retrieveFoods };
 
 /***/ }),
 /* 6 */
@@ -10606,18 +10608,7 @@
 
 
 	// module
-<<<<<<< HEAD
-<<<<<<< HEAD
-	exports.push([module.id, "table, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n", ""]);
-=======
-	exports.push([module.id, "table, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 300px 300px 300px;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods input {\n  width: 300px; }\n", ""]);
->>>>>>> 60adcdd531c3651ca50d3a580dcf024bf9968e48
-=======
-	exports.push([module.id, "table, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 300px 300px 300px;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods input {\n  width: 300px; }\n", ""]);
-=======
-	exports.push([module.id, "table, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n", ""]);
->>>>>>> master
->>>>>>> f5f2879ee637b874a264148912ff441ffa027d72
+	exports.push([module.id, "tr, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\nth {\n  background-color: #dddddd; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n\ntd.delete {\n  border: none;\n  background-color: white; }\n\ntd.food-calories, td.meal-calories, td.green, td.red {\n  text-align: center; }\n", ""]);
 
 	// exports
 
@@ -10965,18 +10956,7 @@
 
 
 	// module
-<<<<<<< HEAD
-<<<<<<< HEAD
 	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n\nh2 {\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n", ""]);
-=======
-	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n", ""]);
->>>>>>> 60adcdd531c3651ca50d3a580dcf024bf9968e48
-=======
-	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n", ""]);
-=======
-	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n\nh2 {\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n", ""]);
->>>>>>> master
->>>>>>> f5f2879ee637b874a264148912ff441ffa027d72
 
 	// exports
 
@@ -11016,18 +10996,7 @@
 
 
 	// module
-<<<<<<< HEAD
-<<<<<<< HEAD
 	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
-=======
-	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 100px;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
->>>>>>> 60adcdd531c3651ca50d3a580dcf024bf9968e48
-=======
-	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 100px;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
-=======
-	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
->>>>>>> master
->>>>>>> f5f2879ee637b874a264148912ff441ffa027d72
 
 	// exports
 
