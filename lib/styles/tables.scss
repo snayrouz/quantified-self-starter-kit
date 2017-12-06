@@ -1,4 +1,4 @@
-table, td, th {
+tr, td, th {
   border-collapse: collapse;
   border: 0.05em solid black;
   vertical-align: center;
@@ -71,4 +71,13 @@ table.foods-table {
 
 input#myInput {
   margin-bottom: 2em;
+}
+
+td.delete {
+  border: none;
+  background-color: white;
+}
+
+td.food-calories, td.meal-calories, td.green, td.red {
+  text-align: center;
 }
