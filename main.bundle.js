@@ -10466,7 +10466,7 @@
 	};
 
 	var prependMealFood = function prependMealFood(food) {
-	  $('<tr id=' + food.id + '>\n      <td></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
+	  $('<tr id=' + food.id + '>\n      <td><input id="checkBox" type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
 	};
 
 	var mealFoodDeleteListener = function mealFoodDeleteListener() {
