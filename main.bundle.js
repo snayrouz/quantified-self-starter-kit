@@ -10455,13 +10455,17 @@
 	    $.each(data, function (key, value) {
 	      appendMeal(value);
 	    });
-	  }).then(allTotalCal).then(allRemCal);
+	  }).then(function () {
+	    $('tr.all-total').remove();
+	    allTotalCal();
+	  }).then(function () {
+	    $('tr.all-rem').remove();
+	    allRemCal();
+	  });
 	};
 
 	var appendMeal = function appendMeal(meal) {
-	  $('div.meal-wrapper').append('<div class=\'box\'><table id=' + meal.id + ' class=\'meal-foods\'>\n  <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n  <tr><th>Ingredients</th><th>Calories</th></tr>\n  </table></div>').append(mealFoods(meal));
-	  appendCalTotals(meal);
-	  appendRemCal(meal);
+	  $('div.meal-wrapper').append('<div class=\'box' + meal.id + '\'><table id=' + meal.id + ' class=\'meal-foods\'>\n  <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n  <tr><th>Ingredients</th><th>Calories</th></tr>\n  </table></div>').append(mealFoods(meal));
 	};
 
 	var mealFoods = function mealFoods(meal) {
@@ -10469,6 +10473,8 @@
 	  foods.forEach(function (food) {
 	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
+	  appendCalTotals(meal);
+	  appendRemCal(meal);
 	};
 
 	var getSum = function getSum(total, sum) {
@@ -10482,28 +10488,43 @@
 	    sum += parseInt(mealCal.innerHTML);
 	  });
 	  if (sum >= 0) {
-	    $('table.totals-table').append('<tr><td>All Remaining Calories: </td>\n                                      <td class=\'green\'>' + sum + '</td></tr>');
+	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n                                      <td class=\'green\'>' + sum + '</td></tr>');
 	  } else if (sum < 0) {
-	    $('table.totals-table').append('<tr><td>All Remaining Calories: </td>\n                                      <td class=\'red\'>' + sum + '</td></tr>');
+	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n                                      <td class=\'red\'>' + sum + '</td></tr>');
 	  }
 	};
 
 	var allTotalCal = function allTotalCal() {
 	  var total = $('td.meal-calories').get();
 	  var sum = 0;
-	  console.log(total);
 	  $.each(total, function (i, mealCal) {
 	    sum += parseInt(mealCal.innerHTML);
 	  });
-	  $('table.totals-table').append('<tr><td>Total Calories: </td><td>' + sum + '</td></tr>');
+	  $('table.totals-table').append('<tr class=\'all-total\'><td>Total Calories: </td><td>' + sum + '</td></tr>');
 	};
 
 	var addFoodToMeal = function addFoodToMeal() {
-	  $('.btn-group').on('click', 'button[id^=meal-button]', function (e) {});
+	  $('.btn-group').on('click', 'button[id^=meal-button]', function (e) {
+	    e.preventDefault();
+	    var mealId = e.target.id.slice(-1);
+	    var ids = $('input:checked');
+	    $.each(ids, function (i, check) {
+	      var id = check.id.replace('food-', '');
+	      $.ajax({
+	        type: 'POST',
+	        url: api + '/meals/' + mealId + '/foods/' + id
+	      });
+	    });
+	    $.get(api + '/meals/' + mealId + '/foods', function (data) {
+	      $('input[type=checkbox]').prop('checked', false);
+	      $('table#' + mealId + ' tr:not(:first-child)').remove();
+	      mealFoods(data);
+	    });
+	  });
 	};
 
 	var prependMealFood = function prependMealFood(food) {
-	  $('<tr id=' + food.id + '>\n      <td><input id="checkBox" type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
+	  $('<tr id=' + food.id + '>\n    <td><input id=\'food-' + food.id + '\' type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
 	};
 
 	var mealFoodDeleteListener = function mealFoodDeleteListener() {
@@ -10643,7 +10664,7 @@
 
 
 	// module
-	exports.push([module.id, "tr, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\nth {\n  background-color: #dddddd; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n\ntd.delete {\n  border: none;\n  background-color: white; }\n\ntd.food-calories, td.meal-calories, td.green, td.red {\n  text-align: center; }\n", ""]);
+	exports.push([module.id, "tr, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\nth {\n  background-color: #dddddd; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n\ntd.delete {\n  border: none;\n  background-color: white; }\n\ntd.food-calories, td.meal-calories, td.green, td.red {\n  text-align: center; }\n\ncaption {\n  padding-top: 1em; }\n\n.totals-table {\n  padding-top: 3em; }\n", ""]);
 
 	// exports
 
