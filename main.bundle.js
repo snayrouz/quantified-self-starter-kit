@@ -48,7 +48,7 @@
 
 	var $ = __webpack_require__(1);
 	__webpack_require__(2);
-	__webpack_require__(4);
+	__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./meals\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	__webpack_require__(6);
 	__webpack_require__(10);
 	__webpack_require__(12);
@@ -10408,7 +10408,7 @@
 
 	'use strict';
 
-	var mealFoods = __webpack_require__(4);
+	var mealFoods = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./meals\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var $ = __webpack_require__(1);
 
 	var postSuccess = function postSuccess(data) {
@@ -10437,101 +10437,7 @@
 	module.exports = { postSuccess: postSuccess, postError: postError, prependFood: prependFood };
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
-
-	var getMeals = function getMeals() {
-	  $.get(api + '/meals', function (data) {
-	    $.each(data, function (key, value) {
-	      appendMeal(value);
-	    });
-	  });
-	};
-
-	var appendMeal = function appendMeal(meal) {
-	  $('div.meal-wrapper').append('<div class=\'box\'><table id=' + meal.id + ' class=\'meal-foods\'>\n  <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n  <tr><th>Ingredients</th><th>Calories</th></tr>\n  </table></div>').append(mealFoods(meal));
-	  appendCalTotals(meal);
-	  appendRemCal(meal);
-	};
-
-	var mealFoods = function mealFoods(meal) {
-	  var foods = meal.foods;
-	  foods.forEach(function (food) {
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
-	  });
-	};
-
-	var prependMealFood = function prependMealFood(food) {
-	  $('<tr id=' + food.id + '>\n      <td><input id="checkBox" type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
-	};
-
-	var mealFoodDeleteListener = function mealFoodDeleteListener() {
-	  $('.meal-wrapper').on('click', 'a.meal-food-delete', function (e) {
-	    e.preventDefault();
-	    var id = $(e.currentTarget).closest('tr').attr('class').split(' ')[0];
-	    var mealId = $(e.currentTarget).closest('table')[0].id;
-	    deleteFoodFromMeals(mealId, id);
-	  });
-	};
-
-	var deleteFoodFromMeals = function deleteFoodFromMeals(mealId, id) {
-	  $.ajax({
-	    type: 'DELETE',
-	    url: api + '/meals/' + mealId + '/foods/' + id,
-	    success: 'Meal Food ' + id + ' deleted'
-	  }).then(function () {
-	    $('.meal-wrapper').empty();
-	    getMeals();
-	  });
-	};
-
-	var mealCalorieTotal = function mealCalorieTotal(meal) {
-	  var sum = 0;
-	  $.each(meal['foods'], function (i, food) {
-	    sum += food.calories;
-	  });
-	  return sum;
-	};
-
-	var remCal = function remCal(meal) {
-	  var calories = 0;
-	  if (meal.name === 'Snack') {
-	    calories = 200 - mealCalorieTotal(meal);
-	  }
-	  if (meal.name === 'Breakfast') {
-	    calories = 400 - mealCalorieTotal(meal);
-	  }
-	  if (meal.name === 'Lunch') {
-	    calories = 600 - mealCalorieTotal(meal);
-	  }
-	  if (meal.name === 'Dinner') {
-	    calories = 800 - mealCalorieTotal(meal);
-	  }
-	  if (calories >= 0) {
-	    return '<tr><td class=\'remaining-cal\'>Remaining Calories: </td><td class=\'green\'> ' + calories + ' </td></tr>';
-	  }
-	  if (calories < 0) {
-	    return '<tr><td class=\'remaining-cal\'>Remaining Calories: </td><td class=\'red\'> ' + calories + ' </td></tr>';
-	  }
-	};
-
-	var appendCalTotals = function appendCalTotals(meal) {
-	  $('table#' + meal.id + ' tr:last').after('<tr><td class=\'total\'>Total Calories: </td>\n                                       <td class=\'meal-calories\'>' + mealCalorieTotal(meal) + '</td>\n                                       </tr>');
-	};
-
-	var appendRemCal = function appendRemCal(meal) {
-	  $('table#' + meal.id + ' tr:last').after(remCal(meal));
-	};
-
-	getMeals();
-	mealFoodDeleteListener();
-	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood };
-
-/***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
