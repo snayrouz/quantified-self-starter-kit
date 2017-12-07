@@ -10444,12 +10444,18 @@
 
 	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
 
+	$(document).ready(function () {
+	  getMeals();
+	  mealFoodDeleteListener();
+	  addFoodToMeal();
+	});
+
 	var getMeals = function getMeals() {
 	  $.get(api + '/meals', function (data) {
 	    $.each(data, function (key, value) {
 	      appendMeal(value);
 	    });
-	  });
+	  }).then(allTotalCal).then(allRemCal);
 	};
 
 	var appendMeal = function appendMeal(meal) {
@@ -10463,6 +10469,37 @@
 	  foods.forEach(function (food) {
 	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
+	};
+
+	var getSum = function getSum(total, sum) {
+	  return total + sum;
+	};
+
+	var allRemCal = function allRemCal() {
+	  var total = $('td.green, td.red').get();
+	  var sum = 0;
+	  $.each(total, function (i, mealCal) {
+	    sum += parseInt(mealCal.innerHTML);
+	  });
+	  if (sum >= 0) {
+	    $('table.totals-table').append('<tr><td>All Remaining Calories: </td>\n                                      <td class=\'green\'>' + sum + '</td></tr>');
+	  } else if (sum < 0) {
+	    $('table.totals-table').append('<tr><td>All Remaining Calories: </td>\n                                      <td class=\'red\'>' + sum + '</td></tr>');
+	  }
+	};
+
+	var allTotalCal = function allTotalCal() {
+	  var total = $('td.meal-calories').get();
+	  var sum = 0;
+	  console.log(total);
+	  $.each(total, function (i, mealCal) {
+	    sum += parseInt(mealCal.innerHTML);
+	  });
+	  $('table.totals-table').append('<tr><td>Total Calories: </td><td>' + sum + '</td></tr>');
+	};
+
+	var addFoodToMeal = function addFoodToMeal() {
+	  $('.btn-group').on('click', 'button[id^=meal-button]', function (e) {});
 	};
 
 	var prependMealFood = function prependMealFood(food) {
@@ -10512,24 +10549,22 @@
 	    calories = 800 - mealCalorieTotal(meal);
 	  }
 	  if (calories >= 0) {
-	    return '<tr><td class=\'remaining-cal\'>Remaining Calories: </td><td class=\'green\'> ' + calories + ' </td></tr>';
+	    return '<tr class=\'rem-cal\'><td class=\'remaining-cal\'>Remaining Calories: </td><td class=\'green\'> ' + calories + ' </td></tr>';
 	  }
 	  if (calories < 0) {
-	    return '<tr><td class=\'remaining-cal\'>Remaining Calories: </td><td class=\'red\'> ' + calories + ' </td></tr>';
+	    return '<tr class=\'rem-cal\'><td class=\'remaining-cal\'>Remaining Calories: </td><td class=\'red\'> ' + calories + ' </td></tr>';
 	  }
 	};
 
 	var appendCalTotals = function appendCalTotals(meal) {
-	  $('table#' + meal.id + ' tr:last').after('<tr><td class=\'total\'>Total Calories: </td>\n                                       <td class=\'meal-calories\'>' + mealCalorieTotal(meal) + '</td>\n                                       </tr>');
+	  $('table#' + meal.id + ' tr:last').after('<tr class=\'meal-cal-total\'><td class=\'total\'>Total Calories: </td>\n                                       <td class=\'meal-calories\'>' + mealCalorieTotal(meal) + '</td>\n                                       </tr>');
 	};
 
 	var appendRemCal = function appendRemCal(meal) {
 	  $('table#' + meal.id + ' tr:last').after(remCal(meal));
 	};
 
-	getMeals();
-	mealFoodDeleteListener();
-	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood };
+	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood, addFoodToMeal: addFoodToMeal };
 
 /***/ }),
 /* 5 */
