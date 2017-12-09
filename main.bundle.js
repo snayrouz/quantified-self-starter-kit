@@ -10332,7 +10332,6 @@
 	    var value = $(this).text();
 	    updateFood(id, attribute, value);
 	  });
-	  deleteFoodId();
 	});
 
 	var updateFood = function updateFood(id, attr, value) {
@@ -10370,24 +10369,22 @@
 	  requests.createFood(food, calories);
 	});
 
-	var deleteFoodId = function deleteFoodId() {
-	  $('.foods-table').on('click', 'a.delete', function (e) {
-	    var id = $(e.target).parent().parent().parent()[0].id;
-	    $.get(api + '/meals', function (data) {
-	      data.forEach(function (datum) {
-	        datum.foods.filter(function (food) {
-	          if (id == food.id) {
-	            deleteFoodFromMeals(datum, id);
-	            deleteFood(id);
-	          } else {
-	            deleteFood(id);
-	          }
-	        });
+	var deleteFoodId = $('.foods-table').on('click', 'a.delete', function (e) {
+	  var id = $(e.target).parent().parent().parent()[0].id;
+	  $.get(api + '/meals', function (data) {
+	    data.forEach(function (datum) {
+	      datum.foods.filter(function (food) {
+	        if (id == food.id) {
+	          deleteFoodFromMeals(datum, id);
+	          deleteFood(id);
+	        } else {
+	          deleteFood(id);
+	        }
 	      });
 	    });
-	    e.preventDefault();
 	  });
-	};
+	  e.preventDefault();
+	});
 
 	var deleteFood = function deleteFood(id) {
 	  $.ajax({
@@ -10557,10 +10554,7 @@
 	  }).then(function () {
 	    $('table#' + mealId + ' tr:not(:first-child)').remove();
 	    reGetMeal(mealId);
-	    // $('.meal-wrapper').empty()
-	    // getMeals()
 	  });
-	  // .then(reGetMeal(mealId))
 	};
 
 	var mealCalorieTotal = function mealCalorieTotal(meal) {
@@ -10693,7 +10687,7 @@
 	      handlers.prependFood(food);
 	    });
 	  });
-	  // foods.deleteFoodId
+	  foods.deleteFoodId;
 	};
 
 	module.exports = { createFood: createFood, retrieveFoods: retrieveFoods };
