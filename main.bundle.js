@@ -10332,6 +10332,7 @@
 	    var value = $(this).text();
 	    updateFood(id, attribute, value);
 	  });
+	  deleteFoodId();
 	});
 
 	var updateFood = function updateFood(id, attr, value) {
@@ -10369,22 +10370,24 @@
 	  requests.createFood(food, calories);
 	});
 
-	var deleteFoodId = $('.foods-table').on('click', 'a.delete', function (e) {
-	  var id = $(e.target).parent().parent().parent()[0].id;
-	  $.get(api + '/meals', function (data) {
-	    data.forEach(function (datum) {
-	      datum.foods.filter(function (food) {
-	        if (id == food.id) {
-	          deleteFoodFromMeals(datum, id);
-	          deleteFood(id);
-	        } else {
-	          deleteFood(id);
-	        }
+	var deleteFoodId = function deleteFoodId() {
+	  $('.foods-table').on('click', 'a.delete', function (e) {
+	    var id = $(e.target).parent().parent().parent()[0].id;
+	    $.get(api + '/meals', function (data) {
+	      data.forEach(function (datum) {
+	        datum.foods.filter(function (food) {
+	          if (id == food.id) {
+	            deleteFoodFromMeals(datum, id);
+	            deleteFood(id);
+	          } else {
+	            deleteFood(id);
+	          }
+	        });
 	      });
 	    });
+	    e.preventDefault();
 	  });
-	  e.preventDefault();
-	});
+	};
 
 	var deleteFood = function deleteFood(id) {
 	  $.ajax({
@@ -10524,6 +10527,12 @@
 	    $('input[type=checkbox]').prop('checked', false);
 	    $('table#' + mealId + ' tr:not(:first-child)').remove();
 	    mealFoods(data);
+	  }).then(function () {
+	    $('tr.all-total').remove();
+	    allTotalCal();
+	  }).then(function () {
+	    $('tr.all-rem').remove();
+	    allRemCal();
 	  });
 	};
 
@@ -10684,7 +10693,7 @@
 	      handlers.prependFood(food);
 	    });
 	  });
-	  foods.deleteFoodId;
+	  // foods.deleteFoodId
 	};
 
 	module.exports = { createFood: createFood, retrieveFoods: retrieveFoods };
