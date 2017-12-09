@@ -10463,8 +10463,6 @@
 
 	var appendMeal = function appendMeal(meal) {
 	  $('div.meal-wrapper').append('<div class=\'box' + meal.id + '\'><table id=' + meal.id + ' class=\'meal-foods\'>\n  <caption class=\'meal-name\'><h1 class=\'meal\'>' + meal.name + '</h1></caption>\n  <tr><th>Ingredients</th><th>Calories</th></tr>\n  </table></div>').append(mealFoods(meal));
-	  appendCalTotals(meal);
-	  appendRemCal(meal);
 	};
 
 	var mealFoods = function mealFoods(meal) {
@@ -10472,6 +10470,8 @@
 	  foods.forEach(function (food) {
 	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n  <td class=\'food-name\'>' + food.name + '</td>\n  <td class=\'food-calories\'>' + food.calories + '</td>\n  <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n  </tr>');
 	  });
+	  appendCalTotals(meal);
+	  appendRemCal(meal);
 	};
 
 	var getSum = function getSum(total, sum) {
@@ -10485,9 +10485,9 @@
 	    sum += parseInt(mealCal.innerHTML);
 	  });
 	  if (sum >= 0) {
-	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n    <td class=\'green\'>' + sum + '</td></tr>');
+	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n                                      <td class=\'green\'>' + sum + '</td></tr>');
 	  } else if (sum < 0) {
-	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n    <td class=\'red\'>' + sum + '</td></tr>');
+	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n                                      <td class=\'red\'>' + sum + '</td></tr>');
 	  }
 	};
 
@@ -10514,14 +10514,16 @@
 	    });
 	    $.get(api + '/meals/' + mealId + '/foods', function (data) {
 	      $('input[type=checkbox]').prop('checked', false);
-	      $('div.box' + data.id).remove();
-	      appendMeal(data);
+	      $('table#' + mealId + ' tr:not(:first-child)').remove();
+	      mealFoods(data);
 	    });
 	  });
 	};
 
 	var prependMealFood = function prependMealFood(food) {
-	  $('<tr id=' + food.id + '>\n<td><input id=\'food-' + food.id + '\' type="checkbox"></td>\n  <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n  <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n  </tr>').prependTo('tbody.meal-foods-body');
+
+	  $('<tr id=' + food.id + '>\n    <td><input id=\'food-' + food.id + '\' type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
+
 	};
 
 	var mealFoodDeleteListener = function mealFoodDeleteListener() {
