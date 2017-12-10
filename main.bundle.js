@@ -10414,12 +10414,9 @@
 	var postSuccess = function postSuccess(data) {
 	  prependFood(data);
 	};
-	// this function will post an error mssage if the fields are successfully filled out
+
 	var postError = function postError(error) {
 	  if (error.responseText.includes('name') && error.responseText.includes('calories')) {
-	    // the responseText property will have the partial response as it arrives even before the request is complete.
-	    //  If responseType is set to anything other than the empty string or "text", accessing responseText
-	    //  will throw InvalidStateError exception.
 	    $('input.food').after('<p class="food-error">Please enter a food name</p>');
 	    $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
 	  } else if (error.responseText.includes('name')) {
@@ -10430,7 +10427,7 @@
 	};
 
 	var prependFood = function prependFood(food) {
-	  $('<tr id=' + food.id + '>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      <td class=\'delete\'><a class=\'delete\' ><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n      </tr>').prependTo('tbody.foods-body');
+	  $('<tr id=' + food.id + '>\n<td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n<td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n<td class=\'delete\'><a class=\'delete\' ><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n</tr>').prependTo('tbody.foods-body');
 	  mealFoods.prependMealFood(food);
 	};
 
@@ -10472,6 +10469,7 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
+
 	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'meal-food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
 	  appendCalTotals(meal);
@@ -10535,6 +10533,7 @@
 
 	var prependMealFood = function prependMealFood(food) {
 	  $('<tr id=' + food.id + '>\n    <td><input id=\'food-' + food.id + '\' class=\'check-box\' type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
+
 	};
 
 	var mealFoodDeleteListener = function mealFoodDeleteListener() {
@@ -10588,7 +10587,7 @@
 	};
 
 	var appendCalTotals = function appendCalTotals(meal) {
-	  $('table#' + meal.id + ' tr:last').after('<tr class=\'meal-cal-total\'><td class=\'total\'>Total Calories: </td>\n                                       <td class=\'meal-calories\'>' + mealCalorieTotal(meal) + '</td>\n                                       </tr>');
+	  $('table#' + meal.id + ' tr:last').after('<tr class=\'meal-cal-total\'><td class=\'total\'>Total Calories: </td>\n  <td class=\'meal-calories\'>' + mealCalorieTotal(meal) + '</td>\n  </tr>');
 	};
 
 	var appendRemCal = function appendRemCal(meal) {
