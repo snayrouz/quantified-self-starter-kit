@@ -10445,6 +10445,7 @@
 	  getMeals();
 	  mealFoodDeleteListener();
 	  addFoodToMeal();
+	  sortHeaders();
 	});
 
 	var getMeals = function getMeals() {
@@ -10468,7 +10469,8 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n  <td class=\'food-name\'>' + food.name + '</td>\n  <td class=\'food-calories\'>' + food.calories + '</td>\n  <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n  </tr>');
+
+	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'meal-food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
 	  appendCalTotals(meal);
 	  appendRemCal(meal);
@@ -10510,19 +10512,27 @@
 	      $.ajax({
 	        type: 'POST',
 	        url: api + '/meals/' + mealId + '/foods/' + id
-	      });
-	    });
-	    $.get(api + '/meals/' + mealId + '/foods', function (data) {
-	      $('input[type=checkbox]').prop('checked', false);
-	      $('table#' + mealId + ' tr:not(:first-child)').remove();
-	      mealFoods(data);
+	      }).then(reGetMeal(mealId));
 	    });
 	  });
 	};
 
-	var prependMealFood = function prependMealFood(food) {
+	var reGetMeal = function reGetMeal(mealId) {
+	  $.get(api + '/meals/' + mealId + '/foods', function (data) {
+	    $('input[type=checkbox]').prop('checked', false);
+	    $('table#' + mealId + ' tr:not(:first-child)').remove();
+	    mealFoods(data);
+	  }).then(function () {
+	    $('tr.all-total').remove();
+	    allTotalCal();
+	  }).then(function () {
+	    $('tr.all-rem').remove();
+	    allRemCal();
+	  });
+	};
 
-	  $('<tr id=' + food.id + '>\n    <td><input id=\'food-' + food.id + '\' type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
+	var prependMealFood = function prependMealFood(food) {
+	  $('<tr id=' + food.id + '>\n    <td><input id=\'food-' + food.id + '\' class=\'check-box\' type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
 
 	};
 
@@ -10541,8 +10551,8 @@
 	    url: api + '/meals/' + mealId + '/foods/' + id,
 	    success: 'Meal Food ' + id + ' deleted'
 	  }).then(function () {
-	    $('.meal-wrapper').empty();
-	    getMeals();
+	    $('table#' + mealId + ' tr:not(:first-child)').remove();
+	    reGetMeal(mealId);
 	  });
 	};
 
@@ -10584,7 +10594,60 @@
 	  $('table#' + meal.id + ' tr:last').after(remCal(meal));
 	};
 
-	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood, addFoodToMeal: addFoodToMeal };
+	var sortTable = function sortTable(f, n) {
+	  var rows = $('.meal-foods-table tbody tr').get();
+	  rows.sort(function (a, b) {
+	    var A = getVal(a);
+	    var B = getVal(b);
+	    if (A < B) {
+	      return -1 * f;
+	    }
+	    if (A > B) {
+	      return 1 * f;
+	    }
+	    return 0;
+	  });
+
+	  function getVal(elm) {
+	    var v = $(elm).children('td').eq(2).text().toUpperCase();
+	    if ($.isNumeric(v)) {
+	      v = parseInt(v, 10);
+	    }
+	    return v;
+	  }
+
+	  $.each(rows, function (index, row) {
+	    $('.meal-foods-table').children('tbody').append(row);
+	  });
+	};
+
+	var sortHeaders = function sortHeaders() {
+	  var f_nm = 1;
+	  var clickCount = 0;
+
+	  $("#cal").on('click', 'button.sort-cal', function () {
+	    if (clickCount === 0 || clickCount === 1) {
+	      f_nm *= -1;
+	      var n = $(undefined).prevAll().length;
+	      sortTable(f_nm, n);
+	      clickCount++;
+	    } else if (clickCount === 2) {
+	      clickCount = 0;
+	      $.get(api + '/foods').then(function (data) {
+	        reGetFoods(data);
+	      });
+	    }
+	  });
+	};
+
+	var reGetFoods = function reGetFoods(foods) {
+	  $('tbody.meal-foods-body').empty();
+	  $.each(foods, function (i, food) {
+	    prependMealFood(food);
+	  });
+	};
+
+	module.exports = { getMeals: getMeals, prependMealFood: prependMealFood, addFoodToMeal: addFoodToMeal, sortTable: sortTable };
 
 /***/ }),
 /* 5 */
@@ -10663,7 +10726,7 @@
 
 
 	// module
-	exports.push([module.id, "tr, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\nth {\n  background-color: #dddddd; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #f2f2f2; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 50vmax;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 10vmax;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n\ntd.delete {\n  border: none;\n  background-color: white; }\n\ntd.food-calories, td.meal-calories, td.green, td.red {\n  text-align: center; }\n\ncaption {\n  padding-top: 1em; }\n\n.totals-table {\n  padding-top: 3em; }\n", ""]);
+	exports.push([module.id, "tr, td, th {\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em; }\n\nth {\n  background-color: #dddddd; }\n\ntd, th, td.meal-calories, .food-calories {\n  padding-left: 2.1em;\n  border-collapse: collapse;\n  border: 0.05em solid black;\n  vertical-align: center;\n  height: 2em;\n  padding: .25em; }\n\ntr:nth-child(even) {\n  background-color: #e6e6e6; }\n\na.delete, a.meal-food-delete {\n  font-size: 1.5em; }\n\n.green {\n  color: green; }\n\n.red {\n  color: red; }\n\n.total, .remaining-cal, .meal-calories {\n  background-color: #d1d1e0; }\n\n.box {\n  display: grid;\n  grid-template-columns: 50vmax 50vmax 50vmax;\n  grid-gap: 10px;\n  background-color: #fff;\n  color: #444; }\n\n.foods, input {\n  width: 20em;\n  height: 2em;\n  border-color: black;\n  font-size: 1em; }\n\n.add-food {\n  background-color: #56CCF2;\n  width: 7em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\ntable.foods-table {\n  width: 50vmax; }\n\ninput#myInput {\n  margin-bottom: 2em; }\n\ntd.delete {\n  border: none;\n  background-color: white; }\n\ntd.food-calories, td.meal-calories, td.green, td.red {\n  text-align: center; }\n\ncaption {\n  padding-top: 1em; }\n\n.totals-table {\n  padding-top: 3em; }\n\n.check-box {\n  width: 1em; }\n\n.hidden {\n  background: transparent;\n  border: none; }\n\nth {\n  background-color: #e6e6ff; }\n", ""]);
 
 	// exports
 
@@ -11011,7 +11074,7 @@
 
 
 	// module
-	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n\nh2 {\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n", ""]);
+	exports.push([module.id, "h1.meal {\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\ntable {\n  font: 100% Arial, Helvetica, san-serif; }\n\nh2 {\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold;\n  text-align: left; }\n\nh1 {\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 3em;\n  font-weight: bold;\n  text-align: left; }\n", ""]);
 
 	// exports
 
@@ -11051,7 +11114,7 @@
 
 
 	// module
-	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n", ""]);
+	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\nbutton.sort-cal {\n  background: none;\n  border: none;\n  cursor: pointer;\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold; }\n\nbutton:focus {\n  outline: none; }\n", ""]);
 
 	// exports
 
