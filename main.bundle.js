@@ -10320,7 +10320,7 @@
 
 	var handlers = __webpack_require__(3);
 	var requests = __webpack_require__(5);
-	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
+	var api = 'https://qs-js-api.herokuapp.com/api/v1';
 
 	$(document).ready(function () {
 	  requests.retrieveFoods();
@@ -10439,7 +10439,7 @@
 
 	'use strict';
 
-	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
+	var api = 'https://qs-js-api.herokuapp.com/api/v1';
 
 	$(document).ready(function () {
 	  getMeals();
@@ -10469,8 +10469,7 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
-
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'meal-food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
+	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'meal-food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
 	  appendCalTotals(meal);
 	  appendRemCal(meal);
@@ -10487,9 +10486,9 @@
 	    sum += parseInt(mealCal.innerHTML);
 	  });
 	  if (sum >= 0) {
-	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n                                      <td class=\'green\'>' + sum + '</td></tr>');
+	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n    <td class=\'green\'>' + sum + '</td></tr>');
 	  } else if (sum < 0) {
-	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n                                      <td class=\'red\'>' + sum + '</td></tr>');
+	    $('table.totals-table').append('<tr class=\'all-rem\'><td>All Remaining Calories: </td>\n    <td class=\'red\'>' + sum + '</td></tr>');
 	  }
 	};
 
@@ -10533,7 +10532,6 @@
 
 	var prependMealFood = function prependMealFood(food) {
 	  $('<tr id=' + food.id + '>\n    <td><input id=\'food-' + food.id + '\' class=\'check-box\' type="checkbox"></td>\n      <td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n      <td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n      </tr>').prependTo('tbody.meal-foods-body');
-
 	};
 
 	var mealFoodDeleteListener = function mealFoodDeleteListener() {
@@ -10656,7 +10654,7 @@
 	'use strict';
 
 	var $ = __webpack_require__(1);
-	var api = 'https://warm-sierra-65111.herokuapp.com/api/v1';
+	var api = 'https://qs-js-api.herokuapp.com/api/v1';
 	var handlers = __webpack_require__(3);
 	var foods = __webpack_require__(2);
 
