@@ -17,8 +17,8 @@ Node.js
 1. Clone the frontend app and change into the `quantified-self` directory:
 
 ```
-$ git clone https://github.com/mimilettd/quantified-self.git
-$ cd quantified-self
+$ git clone https://github.com/snayrouz/quantified-self-starter-kit/
+$ cd quantified-self-starter-kit
 ```
 
 2. Install the dependencies of the starter kit:
@@ -34,7 +34,7 @@ $ npm install
 $ npm start
 ```
 
-To view the application, visit `http://localhost:8080`.
+To view the application, visit https://snayrouz.github.io/quantified-self-starter-kit/.
 
 ## Tech Stack
 
