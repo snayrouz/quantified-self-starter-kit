@@ -10427,7 +10427,7 @@
 	};
 
 	var prependFood = function prependFood(food) {
-	  $('<tr id=' + food.id + '>\n<td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n<td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n<td class=\'delete\'><a class=\'delete\' ><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n</tr>').prependTo('tbody.foods-body');
+	  $('<tr id=' + food.id + '>\n<td class=\'food-name\' contenteditable=\'true\'>' + food.name + '</td>\n<td class=\'food-calories\' contenteditable=\'true\'>' + food.calories + '</td>\n<td tabindex=0 class=\'delete\'><a class=\'delete\' ><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n</tr>').prependTo('tbody.foods-body');
 	  mealFoods.prependMealFood(food);
 	};
 
@@ -10469,7 +10469,7 @@
 	var mealFoods = function mealFoods(meal) {
 	  var foods = meal.foods;
 	  foods.forEach(function (food) {
-	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'meal-food-calories\'>' + food.calories + '</td>\n    <td class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
+	    $('table#' + meal.id).append('<tr class=\'' + food.id + ' meal' + (food.id += 1) + '\'>\n\n    <td class=\'food-name\'>' + food.name + '</td>\n    <td class=\'meal-food-calories\'>' + food.calories + '</td>\n    <td tabindex=0 class=\'delete\'><a class=\'meal-food-delete\'><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>\n    </tr>');
 	  });
 	  appendCalTotals(meal);
 	  appendRemCal(meal);
@@ -11112,7 +11112,7 @@
 
 
 	// module
-	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\nbutton.sort-cal {\n  background: none;\n  border: none;\n  cursor: pointer;\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold; }\n\nbutton:focus {\n  outline: none; }\n", ""]);
+	exports.push([module.id, ".delete, .meal-food-delete {\n  color: red;\n  cursor: pointer; }\n\na.button.new-food {\n  background-color: #56CCF2;\n  text-decoration: none;\n  width: 50em;\n  border-style: solid;\n  color: black;\n  border-color: black;\n  border-width: 1.5px;\n  font-size: 1.5em;\n  cursor: pointer;\n  border-radius: 25px;\n  margin-bottom: 1em;\n  margin-top: 1em; }\n\nbutton.sort-cal {\n  background: none;\n  border: none;\n  cursor: pointer;\n  font: 100% Arial, Helvetica, san-serif;\n  font-size: 100%;\n  font-weight: bold; }\n", ""]);
 
 	// exports
 
