@@ -2,7 +2,7 @@
 
 A calorie tracker project that is built with jQuery and Javascript.
 
-Deployed on Github Pages: https://snayrouz.github.io/quantified-self-starter-kit/
+To view the application, visit https://snayrouz.github.io/quantified-self-starter-kit/
 
 ## Getting Started
 
@@ -35,8 +35,6 @@ Run the following commands in your terminal to start the server:
 $ npm install
 $ npm start
 ```
-
-To view the application, visit https://snayrouz.github.io/quantified-self-starter-kit/.
 
 ## Tech Stack
 
